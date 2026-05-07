@@ -1,2 +1,45 @@
-vmess://eyJhZGQiOiJzZXJ2ZXJuZ29uLnNob3A0Z3ZuLmNvbSIsImFpZCI6IjAiLCJhbHBuIjoiIiwiZnAiOiIiLCJob3N0IjoibS50djM2MC52biIsImlkIjoiNDlmM2UyYWItMWI4Yi00YmRmLTkxNjMtZDRiY2I5NTIyMGQ1IiwiaW5zZWN1cmUiOiIwIiwibmV0Ijoid3MiLCJwYXRoIjoiL1RydW5nNGciLCJwb3J0IjoiODAiLCJwcyI6IlZp4buHdCBOYW3wn4e78J+HsyIsInNjeSI6ImF1dG8iLCJzbmkiOiIiLCJ0bHMiOiIiLCJ0eXBlIjoibm9uZSIsInYiOiIyIn0=
-trojan://23df3f71-7ef9-48fa-aea0-f5f306e0234e@14.225.164.112:443?security=tls&insecure=1&headerType=none&type=tcp&allowInsecure=1&sni=t.tv360.vn#%F0%9F%87%BB%F0%9F%87%B3Sever%20M%E1%BA%A1nh%20Nh%E1%BA%A5t%20%281%29
+port: 7890
+socks-port: 7891
+allow-lan: true
+mode: rule
+log-level: silent
+
+proxies:
+  - name: "VMess-TV360"
+    type: vmess
+    server: serverngon.shop4gvn.com
+    port: 80
+    uuid: 49f3e2ab-1b8b-4bdf-9163-d4bcb95220d5
+    alterId: 0
+    cipher: auto
+    network: ws
+    ws-opts:
+      path: /Trung4g
+      headers:
+        Host: m.tv360.vn
+  - name: "Trojan-TV360"
+    type: trojan
+    server: 14.225.164.112
+    port: 443
+    password: 23df3f71-7ef9-48fa-aea0-f5f306e0234e
+    sni: t.tv360.vn
+    skip-cert-verify: true
+
+proxy-groups:
+  - name: "Proxy"
+    type: select
+    proxies:
+      - "Tự Động"
+      - "VMess-TV360"
+      - "Trojan-TV360"
+      - DIRECT
+  - name: "Tự Động"
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    proxies:
+      - "VMess-TV360"
+      - "Trojan-TV360"
+
+rules:
+  - MATCH,Proxy
