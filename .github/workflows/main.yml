@@ -3,13 +3,14 @@ name: Build Android APK
 on:
   push:
     branches: [ "main", "master" ]
-  pull_request:
-    branches: [ "main", "master" ]
-  workflow_dispatch: # Cho phép bấm nút chạy build thủ công bất cứ lúc nào
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./Ten_Thu_Muc_Con # Đổi thành tên thư mục chứa file gradlew của bạn
 
     steps:
       - name: Tải mã nguồn về máy chủ
@@ -20,7 +21,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-          cache: 'gradle'
 
       - name: Cấp quyền thực thi cho Gradle
         run: chmod +x gradlew
@@ -32,4 +32,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-debug-apk
-          path: app/build/outputs/apk/debug/*.apk
+          path: Ten_Thu_Muc_Con/app/build/outputs/apk/debug/*.apk # Nhớ thêm tên thư mục con ở đầu đường dẫn
