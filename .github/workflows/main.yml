@@ -1,0 +1,40 @@
+name: Build FlowPX 2core Debug APK
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # 1. Build tệp Debug APK mặc định
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug
+
+      # 2. Tạo thư mục dist/ và đổi tên tệp APK theo đúng chuẩn bạn cần
+      - name: Prepare dist APK
+        run: |
+          mkdir -p dist
+          cp app/build/outputs/apk/debug/*.apk dist/FlowPX-2core-xray26627-singbox1414-debug.apk
+
+      # 3. Xuất tệp từ thư mục dist/ lên mục Artifacts của GitHub Actions
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FlowPX-2core-xray26627-singbox1414-debug
+          path: dist/FlowPX-2core-xray26627-singbox1414-debug.apk
